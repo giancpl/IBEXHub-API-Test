@@ -133,6 +133,25 @@ Here is a list of possible test cases to observe how the API behaves:
 - Currently, the web UI for the API is not responsive, which prevents users from manually entering email, password, and authentication token. Implementing a more user-friendly and responsive interface would improve the overall experience and make testing easier for users.
 - Although I have not yet reached the limit for creating access tokens from a single refresh token, it would be beneficial to implement a threshold for the maximum number of access tokens that can be generated in a given time period. This would act as an additional security measure to prevent potential abuse. If this limitation is not already in place, it is recommended to consider adding it.
 
+
+
+## Generate onchain address 
+
+This feature is implemented as method in the account class and takes as input the *accessToken*. 
+Then you can call the function that performs a POST request to the endpoint (https://api-sandbox.poweredbyibex.io/onchain/address) to generate the onchain address for the account chosen.
+
+### Test result
+- 201 - Created: A new bitcoin on-chain address (P2WPKH) is successfully created.
+- 400 - Bad Request: The account is specified in an unexpected format.
+- 401 - Unauthorized: Invalid token provided.
+- 404 - Not Found: The specified account is not present in the list of available accounts.
+### Suggestions
+- The documentation contains a truncated sentence: "Funds will only show up after a transaction's status is...". This incomplete sentence needs clarification to properly explain when and how funds will appear in the new onchain address.
+- It would be an excellent implementation to be able to select the type of address to be generated, despite the fact that those currently present (P2WPKH) are the most common. 
+- Another option could be to link a unique on-chain address to each user or account using a silent payment address (as specified in BIP 352). This new system eliminates the need for users to create a new address every time they want to receive a payment. Instead, the payer automatically generates the address based on a fixed starting point (an 'sp1' address) provided by the recipient. The implementation of this new protocol does not compromise address privacy due to the incorporation of Taproot technology.
+
+
+
 ## Create and associate a lightning address to the IBEXHub account
 Lightning addresses provide a user-friendly way to facilitate payments on the Lightning Network, aiming to enhance the usability of Bitcoin for everyday transactions. 
 This functionality allows the creation of a Lightning address linked to a user account. Multiple Lightning addresses can be generated from the same account. 
@@ -155,6 +174,7 @@ The values are passed as input in a JSON format in the body of a POST request to
 - The web interface example (executed in Python) currently returns a 400 response code due to an EOF error.
 - If too many Lightning addresses are being created, there could be rate limiting or throttling mechanisms in place to prevent abuse or accidental flooding of the system. A limit on the number of addresses per account within a specific timeframe could be beneficial for both security and performance reasons.
 - If an address is not used for a long period, it might be helpful to add an automatic expiration or deactivation feature to prevent old, unused addresses from cluttering the system. Users could be notified about the expiration date or prompted to confirm continued usage.
+
 
 
 ## Create a Bolt11 invoice using the lightning address
@@ -184,20 +204,6 @@ It is important to investigate and fix this issue to ensure that the API behaves
 Proper error handling and clearer documentation would enhance the overall usability of the API.
 
 
-## Generate onchain address 
-
-This feature is implemented as method in the account class and takes as input the *accessToken*. 
-Then you can call the function that performs a POST request to the endpoint (https://api-sandbox.poweredbyibex.io/onchain/address) to generate the onchain address for the account chosen.
-
-### Test result
-- 201 - Created: A new bitcoin on-chain address (P2WPKH) is successfully created.
-- 400 - Bad Request: The account is specified in an unexpected format.
-- 401 - Unauthorized: Invalid token provided.
-- 404 - Not Found: The specified account is not present in the list of available accounts.
-### Suggestions
-- The documentation contains a truncated sentence: "Funds will only show up after a transaction's status is...". This incomplete sentence needs clarification to properly explain when and how funds will appear in the new onchain address.
-- It would be an excellent implementation to be able to select the type of address to be generated, despite the fact that those currently present (P2WPKH) are the most common.
-
 
 ## Estimate fee required to send sats 
 This feature is implemented in the utils file as a function easly named *estimate_fee*. 
@@ -213,6 +219,7 @@ This request returns an estimation of the fees required to send sats to the spec
 ### Suggestions
 - In testing, the returned fee was consistently 0. This could be due to test environment limitations (e.g., no sats in the account). It would be helpful to clarify in the documentation whether the test environment accurately reflects real-world behavior and under what circumstances a fee of 0 might be returned.
 - For the amount parameter, the valid range or acceptable values are not explicitly documented. Including this information would prevent unnecessary 400 errors and improve user experience.
+
 
 
 ## Create a payment Split 
@@ -255,6 +262,8 @@ In the test file you can simulate it by creating new accounts and trying to send
 ### Suggestions
 The example provided in the web UI is static and non-interactive, preventing users from executing split creation directly from the interface. 
 It would be beneficial to enable an interactive example for better usability and testing.
+
+
 
 ## Conclusions
 The IBEXHub API provides a robust and flexible platform for managing Bitcoin and Lightning Network operations. 
