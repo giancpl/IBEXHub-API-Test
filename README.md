@@ -74,22 +74,6 @@ Examples:
   ```bash
   python test_btc_address_generation.py
   ```
-- Fee Estimation: verifies the fee estimation for a Bitcoin transaction
-  ```bash
-  python test_estimate_fee.py
-  ```
-- Lightning Address Creation: tests generating a Lightning Network address with a specified username
-  ```bash
-  python test_create_ln_address.py
-  ```
-- Invoice Creation from Lightning Address: verifies generating a Bolt11 invoice from a Lightning address
-  ```bash
-  python test_invoice_from_lnaddress.py
-  ```
-- Token Refresh: tests refreshing the access token when expired
-  ```bash
-  python test_refresh_access_token.py
-  ```
 
 ### Jupyter Notebook
 The test code can also be launched from a Jupyter Notebook, thanks to the script collected in the file test.ipynb.
